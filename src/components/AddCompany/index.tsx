@@ -23,7 +23,7 @@ const AddCompany = () => {
           modal: "addCompanyModal",
         }}
       >
-        <AddCompanyForm onCloseAddCompanyModal={onCloseAddCompanyModal} />
+        <AddCompanyForm onCloseCompanyDetailsModal={onCloseAddCompanyModal} />
       </Modal>
     </>
   );
