@@ -1,8 +1,19 @@
 import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 import { ChangeEvent, MouseEvent, useState } from "react";
 import { firebaseDB } from "../../utils/firebaseConfig";
+import {
+  CompanyDataProps,
+  EmployeeProps,
+  ManagerProps,
+} from "../../utils/types";
 
-const AddCompanyForm = (props) => {
+interface CompanyFormProps {
+  onCloseCompanyDetailsModal: () => void;
+  companyId?: string;
+  companyData?: CompanyDataProps;
+}
+
+const AddCompanyForm = (props: CompanyFormProps) => {
   const { onCloseCompanyDetailsModal, companyData, companyId } = props;
 
   const [isButtonLoading, setIsButtonLoading] = useState(false);
@@ -60,7 +71,7 @@ const AddCompanyForm = (props) => {
     e.preventDefault();
 
     setManagerList(
-      managerList.map((manager) => {
+      managerList.map((manager: ManagerProps) => {
         if (manager.id === managerId) {
           return {
             ...manager,
@@ -148,7 +159,7 @@ const AddCompanyForm = (props) => {
     managerId: number
   ) => {
     setManagerList(
-      managerList.map((manager) => {
+      managerList.map((manager: ManagerProps) => {
         if (manager.id === managerId) {
           return {
             ...manager,
@@ -166,17 +177,19 @@ const AddCompanyForm = (props) => {
     employeeId: number
   ) => {
     setManagerList(
-      managerList.map((manager) => {
+      managerList.map((manager: ManagerProps) => {
         if (manager.id === managerId) {
-          const updatedEmployeeList = manager.employeeList.map((employee) => {
-            if (employee.id === employeeId) {
-              return {
-                ...employee,
-                name: e.target.value,
-              };
+          const updatedEmployeeList = manager.employeeList.map(
+            (employee: EmployeeProps) => {
+              if (employee.id === employeeId) {
+                return {
+                  ...employee,
+                  name: e.target.value,
+                };
+              }
+              return employee;
             }
-            return employee;
-          });
+          );
           return {
             ...manager,
             employeeList: updatedEmployeeList,
@@ -187,10 +200,12 @@ const AddCompanyForm = (props) => {
     );
   };
 
-  const saveCompanyDetailsHandler = async (e) => {
+  const saveCompanyDetailsHandler = async (
+    e: MouseEvent<HTMLButtonElement>
+  ) => {
     e.preventDefault();
 
-    managerList.forEach((manager) => {
+    managerList.forEach((manager: ManagerProps) => {
       if (!manager.manager) {
         return setDetailsErrorMessage({
           ...detailsErrorMessage,
@@ -198,7 +213,7 @@ const AddCompanyForm = (props) => {
         });
       }
 
-      manager.employeeList.forEach((employee) => {
+      manager.employeeList.forEach((employee: EmployeeProps) => {
         if (!employee.name) {
           return setDetailsErrorMessage({
             ...detailsErrorMessage,
@@ -298,7 +313,7 @@ const AddCompanyForm = (props) => {
 
       <button onClick={onPressAddManager}>Add Manager</button>
 
-      {managerList.map((manager) => {
+      {managerList.map((manager: ManagerProps) => {
         return (
           <div key={manager?.id} className="manager__input_container">
             <label htmlFor="manager">Manager {manager?.id + 1}</label>
@@ -310,7 +325,7 @@ const AddCompanyForm = (props) => {
             />
 
             <div className="employee__list__container">
-              {manager?.employeeList?.map((employee) => {
+              {manager?.employeeList?.map((employee: EmployeeProps) => {
                 return (
                   <div key={employee?.id} className="employee__input_container">
                     <label htmlFor="employee">

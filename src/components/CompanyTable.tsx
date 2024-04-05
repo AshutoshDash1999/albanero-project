@@ -1,11 +1,12 @@
 import { collection, getFirestore } from "firebase/firestore";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { firebaseApp } from "../utils/firebaseConfig";
+import { ManagerProps } from "../utils/types";
 import DeleteCompany from "./DeleteCompany";
 import EditCompany from "./EditCompany";
 
 const CompanyTable = () => {
-  const [companyData, companyDataLoading, companyDataError] = useCollection(
+  const [companyData, companyDataLoading] = useCollection(
     collection(getFirestore(firebaseApp), "companyData"),
     {
       snapshotListenOptions: { includeMetadataChanges: true },
@@ -29,11 +30,12 @@ const CompanyTable = () => {
           <tbody>
             {companyData &&
               companyData.docs.map((doc) => {
-                const { companyName, domain, email, phoneNumber } = doc?.data();
                 const managerCount = doc?.data()?.managerList?.length;
                 const employeeCount = doc
                   ?.data()
-                  ?.managerList?.map((manager) => manager?.employeeList.length)
+                  ?.managerList?.map(
+                    (manager: ManagerProps) => manager?.employeeList.length
+                  )
                   .reduce(
                     (prevCount: number, currentCount: number) =>
                       prevCount + currentCount,
@@ -41,10 +43,10 @@ const CompanyTable = () => {
                   );
                 return (
                   <tr key={doc.id}>
-                    <td>{companyName}</td>
-                    <td>{email}</td>
-                    <td>{phoneNumber}</td>
-                    <td>{domain}</td>
+                    <td>{doc?.data()?.companyName}</td>
+                    <td>{doc?.data()?.email}</td>
+                    <td>{doc?.data()?.phoneNumber}</td>
+                    <td>{doc?.data()?.domain}</td>
                     <td>{managerCount + employeeCount}</td>
                     <td className="action__cell">
                       <EditCompany
