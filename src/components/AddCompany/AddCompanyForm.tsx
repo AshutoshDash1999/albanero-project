@@ -3,14 +3,14 @@ import { ChangeEvent, MouseEvent, useState } from "react";
 import { firebaseDB } from "../../utils/firebaseConfig";
 
 const AddCompanyForm = (props) => {
-  const { onCloseAddCompanyModal } = props;
+  const { onCloseCompanyDetailsModal, companyData, companyId } = props;
 
   const [isButtonLoading, setIsButtonLoading] = useState(false);
   const [companyDetails, setCompanyDetails] = useState({
-    companyName: "",
-    email: "",
-    phoneNumber: "",
-    domain: "",
+    companyName: companyData?.companyName || "",
+    email: companyData?.email || "",
+    phoneNumber: companyData?.phoneNumber || "",
+    domain: companyData?.domain || "",
   });
 
   const [detailsErrorMessage, setDetailsErrorMessage] = useState({
@@ -21,18 +21,20 @@ const AddCompanyForm = (props) => {
     isFormInComplete: false,
   });
 
-  const [managerList, setManagerList] = useState([
-    {
-      id: 0,
-      manager: "",
-      employeeList: [
-        {
-          id: 0,
-          name: "",
-        },
-      ],
-    },
-  ]);
+  const [managerList, setManagerList] = useState(
+    companyData?.managerList || [
+      {
+        id: 0,
+        manager: "",
+        employeeList: [
+          {
+            id: 0,
+            name: "",
+          },
+        ],
+      },
+    ]
+  );
 
   const onPressAddManager = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -213,15 +215,23 @@ const AddCompanyForm = (props) => {
 
     try {
       setIsButtonLoading(true);
-      await addDoc(collection(firebaseDB, "companyData"), {
-        ...companyDetails,
-        managerList,
-      });
+
+      if (companyId) {
+        await setDoc(doc(firebaseDB, "companyData", companyId), {
+          ...companyDetails,
+          managerList,
+        });
+      } else {
+        await addDoc(collection(firebaseDB, "companyData"), {
+          ...companyDetails,
+          managerList,
+        });
+      }
     } catch (error) {
       console.log("Error while adding company:", error);
     } finally {
       setIsButtonLoading(false);
-      onCloseAddCompanyModal();
+      onCloseCompanyDetailsModal();
     }
   };
 
@@ -296,6 +306,7 @@ const AddCompanyForm = (props) => {
               id="manager"
               type="text"
               onChange={(e) => updateManagerName(e, manager?.id)}
+              value={manager?.manager}
             />
 
             <div className="employee__list__container">
@@ -311,6 +322,7 @@ const AddCompanyForm = (props) => {
                       onChange={(e) =>
                         updateEmployeeName(e, manager?.id, employee?.id)
                       }
+                      value={employee?.name}
                     />
                   </div>
                 );
@@ -331,7 +343,7 @@ const AddCompanyForm = (props) => {
       ) : null}
 
       <div className="modal__footer">
-        <button onClick={onCloseAddCompanyModal}>Cancel</button>
+        <button onClick={onCloseCompanyDetailsModal}>Cancel</button>
         <button onClick={saveCompanyDetailsHandler} disabled={isButtonLoading}>
           Save
         </button>

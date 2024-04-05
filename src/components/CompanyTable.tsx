@@ -12,7 +12,6 @@ const CompanyTable = () => {
     }
   );
 
-  console.log("companyData", companyData?.docs);
   return (
     <div>
       {!companyDataLoading ? (
@@ -30,9 +29,6 @@ const CompanyTable = () => {
           <tbody>
             {companyData &&
               companyData.docs.map((doc) => {
-                // <React.Fragment key={doc.id}>
-                //   {JSON.stringify(doc.data())},{" "}
-                // </React.Fragment>
                 const { companyName, domain, email, phoneNumber } = doc?.data();
                 const managerCount = doc?.data()?.managerList?.length;
                 const employeeCount = doc
@@ -51,7 +47,10 @@ const CompanyTable = () => {
                     <td>{domain}</td>
                     <td>{managerCount + employeeCount}</td>
                     <td className="action__cell">
-                      <EditCompany />
+                      <EditCompany
+                        companyData={doc?.data()}
+                        companyId={doc.id}
+                      />
                       <DeleteCompany companyId={doc.id} />
                     </td>
                   </tr>
