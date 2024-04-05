@@ -1,13 +1,13 @@
+import { DocumentData } from "firebase/firestore";
 import { useState } from "react";
 import Modal from "react-responsive-modal";
-import { CompanyDataProps } from "../utils/types";
 import AddCompanyForm from "./AddCompany/AddCompanyForm";
 
 const EditCompany = ({
   companyData,
   companyId,
 }: {
-  companyData: CompanyDataProps;
+  companyData: DocumentData;
   companyId: string;
 }) => {
   const [openEditCompanyModal, setOpenEditCompanyModal] = useState(false);

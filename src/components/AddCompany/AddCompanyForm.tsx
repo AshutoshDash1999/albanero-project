@@ -1,16 +1,18 @@
-import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  DocumentData,
+  setDoc,
+} from "firebase/firestore";
 import { ChangeEvent, MouseEvent, useState } from "react";
 import { firebaseDB } from "../../utils/firebaseConfig";
-import {
-  CompanyDataProps,
-  EmployeeProps,
-  ManagerProps,
-} from "../../utils/types";
+import { EmployeeProps, ManagerProps } from "../../utils/types";
 
 interface CompanyFormProps {
   onCloseCompanyDetailsModal: () => void;
   companyId?: string;
-  companyData?: CompanyDataProps;
+  companyData?: DocumentData;
 }
 
 const AddCompanyForm = (props: CompanyFormProps) => {
