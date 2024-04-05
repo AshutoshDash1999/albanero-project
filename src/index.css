@@ -126,3 +126,9 @@ input {
   cursor: pointer;
   transition: border-color 0.25s;
 }
+
+.add__company__modal__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
