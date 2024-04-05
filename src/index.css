@@ -50,6 +50,9 @@ button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
+button:disabled {
+  background-color: #432b4d;
+}
 
 @media (prefers-color-scheme: light) {
   :root {
@@ -127,7 +130,7 @@ input {
   transition: border-color 0.25s;
 }
 
-.add__company__modal__footer {
+.modal__footer {
   display: flex;
   justify-content: space-between;
   align-items: center;

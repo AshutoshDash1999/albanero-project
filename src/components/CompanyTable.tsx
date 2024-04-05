@@ -15,7 +15,7 @@ const CompanyTable = () => {
   console.log("companyData", companyData?.docs);
   return (
     <div>
-      {companyDataLoading ? (
+      {!companyDataLoading ? (
         <table>
           <thead>
             <tr>

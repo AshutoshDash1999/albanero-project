@@ -330,7 +330,7 @@ const AddCompanyForm = (props) => {
         </div>
       ) : null}
 
-      <div className="add__company__modal__footer">
+      <div className="modal__footer">
         <button onClick={onCloseAddCompanyModal}>Cancel</button>
         <button onClick={saveCompanyDetailsHandler} disabled={isButtonLoading}>
           Save

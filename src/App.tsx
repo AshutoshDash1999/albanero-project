@@ -1,3 +1,4 @@
+import "react-responsive-modal/styles.css";
 import "./App.css";
 import AddCompany from "./components/AddCompany";
 import CompanyTable from "./components/CompanyTable";
